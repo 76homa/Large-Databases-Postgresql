@@ -1,0 +1,23 @@
+# For example in the below code I want to merge two files named:kpi_sec_h_daily and newmimo. In this code, I put the data newmimo file in front of the data in kpi_sec_h_daily based on the common column named SECTOR 
+
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Step 1: Read files
+df1 = pd.read_csv('C:/tmp/tmp/kpi_sec_h_daily.csv', encoding='latin1')
+df2 = pd.read_excel('C:/Users/homa.behmardi/Downloads/newmimo.xlsx')
+
+# Step 2: Define the columns to join on
+common_column = 'SECTOR'
+
+# Step 3: Perform the join
+df3 = pd.merge(df1, df2, how='inner', on=common_column)
+
+# Step 4: Save the result to a new CSV file if needed
+#df3.to_csv('merged_file.csv', index=False)
+
+# Step 5: Create a PostgreSQL engine
+engine = create_engine('postgresql+psycopg2://postgres:Homa1376@localhost:5432/postgres')
+
+# Step 6: Write the merged data to a PostgreSQL table
+df3.to_sql('kpi_sec_h_daily', engine, index=False, if_exists='append')
